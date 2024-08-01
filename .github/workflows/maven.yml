@@ -21,6 +21,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Push Docker Image
+    # we are using the Pipe for multi line code/script
       run: |
           docker pull ybipin/devtaskmaster:latest
           docker tag ybipin/devtaskmaster:latest ybipin/prodtaskmaster:latest 
