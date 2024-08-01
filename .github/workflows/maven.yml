@@ -26,10 +26,40 @@ jobs:
       run: trivy fs --format table -o fs.html .
 
     - name: SonarQube Scan
-      uses: sonarsource/sonarqube-scan-action@v2.1.0 # Ex: v2.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+      uses: sonarsource/sonarqube-scan-action@v2 # Ex: v2.1.0, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+# Build the docker image
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+     
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Docker Build Image
+      run: |
+        docker build -t ybipin/devtaskmaster:latest .
+    # scan the image after build
+    - name: Trivy Image scan
+      run: trivy image --format table -o image.html ybipin/devtaskmaster:latest
+
+     # login to the dockerhub repository
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      
+    - name: Push Docker Image
+      run: |
+        docker push ybipin/devtaskmaster:latest
+
+    - uses: tale/kubectl-action@v1
+      with:
+        base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+    - run: |
+          kubectl apply -f deployment-service.yml
         
 
    
