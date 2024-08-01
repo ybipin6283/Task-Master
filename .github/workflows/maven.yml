@@ -1,5 +1,5 @@
 
-
+# WE have tag the image old to new or dev to prod
 name: CDPROD with Maven
 
 on:
@@ -18,12 +18,12 @@ jobs:
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
     - name: Push Docker Image
       run: |
           docker pull ybipin/devtaskmaster:latest
-          docker tag ybipin/devtaskmaster:latest ybipin/prodtaskmaster:latest
+          docker tag ybipin/devtaskmaster:latest ybipin/prodtaskmaster:latest 
           docker push ybipin/prodtaskmaster:latest
     - name: Kubectl Action
       uses: tale/kubectl-action@v1
