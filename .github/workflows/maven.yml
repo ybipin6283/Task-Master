@@ -1,6 +1,6 @@
 
 
-name: CDPROD
+name: CDPROD with Maven
 
 on:
   push:
@@ -22,9 +22,9 @@ jobs:
 
     - name: Push Docker Image
       run: |
-          docker pull adijaiswal/devtaskmaster:latest
-          docker tag adijaiswal/devtaskmaster:latest adijaiswal/prodtaskmaster:latest
-          docker push adijaiswal/prodtaskmaster:latest
+          docker pull ybipin/devtaskmaster:latest
+          docker tag ybipin/devtaskmaster:latest ybipin/prodtaskmaster:latest
+          docker push ybipin/prodtaskmaster:latest
     - name: Kubectl Action
       uses: tale/kubectl-action@v1
       with:
